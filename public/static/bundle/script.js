@@ -1,0 +1,1 @@
+(()=>{"use strict";var t=document.getElementById("todo-list");t&&t.addEventListener("contextmenu",(function(t){t.preventDefault(),console.log("right-click")}))})();
