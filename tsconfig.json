@@ -1,10 +1,18 @@
 {
 	"compilerOptions": {
-		"lib": ["ES2016"],
-		"module": "commonjs",
-		"outDir": "dist",
+		"target": "es5",
+		"module": "esnext",
+		"rootDir": "./",
 		"strict": true,
-		"target": "es2016"
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+		"noEmit": true,
+		"allowImportingTsExtensions": true,
+		"allowArbitraryExtensions": true,
+		"allowSyntheticDefaultImports": true,
+		"skipLibCheck": true,
+		"verbatimModuleSyntax": true,
+		"forceConsistentCasingInFileNames": true
 	},
 	"include": ["src"]
 }
