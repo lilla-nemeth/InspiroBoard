@@ -162,6 +162,10 @@ body,
 	flex: 1;
 }
 
+.todo-list {
+	cursor: pointer;
+}
+
 .todo-element {
 	padding: 1rem;
 }
