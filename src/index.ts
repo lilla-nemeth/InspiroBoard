@@ -1,6 +1,6 @@
 'use strict';
 
-import { createContextMenuItem, deleteListItem, downloadCsv } from './utils/helpers';
+import { createContextMenuItem, deleteItemFromDom, deleteItemFromArray, downloadCsv } from './utils/helpers';
 
 const contentContainer = document.getElementById('content-container') as HTMLElement;
 
@@ -20,8 +20,9 @@ for (let i = 0; i < listItems.length; i++) {
 	const todoListElement = document.createElement('li');
 
 	todoListElement.className = 'todo-element';
-	todoListElement.id = `list-item-${listItems[i].id}`;
+	todoListElement.id = `todo-element-${listItems[i].id}`;
 	todoListElement.textContent = listItems[i].todo;
+	todoListElement.setAttribute('data-id', listItems[i].id.toString());
 
 	todoList.appendChild(todoListElement);
 }
@@ -87,7 +88,8 @@ document.addEventListener('click', (e: MouseEvent) => {
 			break;
 		case 'context-menu-delete':
 			if (currentTarget) {
-				deleteListItem({ eventTarget: currentTarget });
+				deleteItemFromArray({ eventTarget: currentTarget, arr: listItems });
+				deleteItemFromDom({ eventTarget: currentTarget });
 				currentTarget = null;
 			}
 			break;

@@ -1,4 +1,4 @@
-import type { ContextMenuItemArgs, ConvertToCsvArgs, DeleteListItemArgs, DownloadCsvArgs } from '../types/types';
+import type { ContextMenuItemArgs, ConvertToCsvArgs, DeleteItemFromDomArgs, DeleteItemFromArrayArgs, DownloadCsvArgs } from '../types/types';
 
 const createContextMenuItem = (args: ContextMenuItemArgs) => {
 	const { contextList, text, styleId, styleClass } = args;
@@ -12,10 +12,25 @@ const createContextMenuItem = (args: ContextMenuItemArgs) => {
 	contextList.appendChild(contextDelete);
 };
 
-const deleteListItem = (args: DeleteListItemArgs) => {
+const deleteItemFromDom = (args: DeleteItemFromDomArgs) => {
 	const { eventTarget } = args;
 
 	eventTarget?.parentElement?.removeChild(eventTarget);
+};
+
+const deleteItemFromArray = (args: DeleteItemFromArrayArgs) => {
+	const { eventTarget, arr } = args;
+
+	const elId = eventTarget.dataset.id;
+	const itemToRemove = arr.find((item) => item.id === Number(elId));
+
+	if (itemToRemove) {
+		const index = arr.indexOf(itemToRemove);
+
+		if (index > -1) {
+			arr.splice(index, 1);
+		}
+	}
 };
 
 const convertToCsv = (args: ConvertToCsvArgs) => {
@@ -41,6 +56,7 @@ const downloadCsv = (args: DownloadCsvArgs) => {
 	a.setAttribute('download', filename);
 	a.href = url;
 	a.click();
+	URL.revokeObjectURL(url);
 };
 
-export { createContextMenuItem, deleteListItem, downloadCsv };
+export { createContextMenuItem, deleteItemFromDom,deleteItemFromArray, downloadCsv };

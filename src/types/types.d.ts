@@ -6,9 +6,13 @@ interface ContextMenuItemArgs {
 	styleClass: string;
 }
 
-interface DeleteListItemArgs {
-	styleId?: string;
+interface DeleteItemFromDomArgs {
 	eventTarget: HTMLElement;
+}
+
+interface DeleteItemFromArrayArgs {
+	eventTarget: HTMLElement;
+	arr: ListItem<string>[];
 }
 
 interface ConvertToCsvArgs {
@@ -24,4 +28,4 @@ interface DownloadCsvArgs {
 	filename: string;
 }
 
-export type { ContextMenuItemArgs, DeleteListItemArgs, ConvertToCsvArgs, DownloadCsvArgs };
+export type { ContextMenuItemArgs, DeleteItemFromDomArgs, DeleteItemFromArrayArgs, ConvertToCsvArgs, DownloadCsvArgs };
