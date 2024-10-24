@@ -3,10 +3,6 @@
 import { createContextMenuItem, deleteListItem } from './utils/helpers';
 
 const todoList = document.getElementById('todo-list') as HTMLElement;
-// const shopping = <HTMLElement>document.getElementById('shopping');
-// const reading = <HTMLElement>document.getElementById('reading');
-// const cooking = <HTMLElement>document.getElementById('cooking');
-// const running = <HTMLElement>document.getElementById('running');
 
 const contextMenu = document.createElement('div');
 contextMenu.className = 'context-menu';
