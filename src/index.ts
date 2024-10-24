@@ -1,6 +1,13 @@
 'use strict';
 
-import { createContextMenuItem, deleteItemFromDom, deleteItemFromArray, downloadCsv } from './utils/helpers';
+import {
+	createContextMenuItem,
+	deleteItemFromDom,
+	deleteItemFromArray,
+	downloadCsv,
+	editItemInDom,
+	editItemInArray,
+} from './utils/helpers';
 
 const contentContainer = document.getElementById('content-container') as HTMLElement;
 
@@ -84,7 +91,11 @@ document.addEventListener('click', (e: MouseEvent) => {
 
 	switch (target.id) {
 		case 'context-menu-edit':
-			console.log('Edit');
+			if (currentTarget) {
+				editItemInDom({ eventTarget: currentTarget });
+				editItemInArray({ eventTarget: currentTarget, arr: listItems });
+				currentTarget = null;
+			}
 			break;
 		case 'context-menu-delete':
 			if (currentTarget) {

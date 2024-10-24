@@ -1,4 +1,13 @@
-import type { ContextMenuItemArgs, ConvertToCsvArgs, DeleteItemFromDomArgs, DeleteItemFromArrayArgs, DownloadCsvArgs } from '../types/types';
+import type {
+	ContextMenuItemArgs,
+	ConvertToCsvArgs,
+	DeleteItemFromDomArgs,
+	DeleteItemFromArrayArgs,
+	DownloadCsvArgs,
+	EditItemInDomArgs,
+	EditItemInArrayArgs,
+	FindCurrentItemArgs,
+} from '../types/types';
 
 const createContextMenuItem = (args: ContextMenuItemArgs) => {
 	const { contextList, text, styleId, styleClass } = args;
@@ -12,6 +21,15 @@ const createContextMenuItem = (args: ContextMenuItemArgs) => {
 	contextList.appendChild(contextDelete);
 };
 
+const findCurrentItem = (args: FindCurrentItemArgs) => {
+	const { eventTarget, arr } = args;
+
+	const elId = eventTarget.dataset.id;
+	const currentItem = arr.find((item) => item.id === Number(elId));
+
+	return currentItem;
+};
+
 const deleteItemFromDom = (args: DeleteItemFromDomArgs) => {
 	const { eventTarget } = args;
 
@@ -21,14 +39,63 @@ const deleteItemFromDom = (args: DeleteItemFromDomArgs) => {
 const deleteItemFromArray = (args: DeleteItemFromArrayArgs) => {
 	const { eventTarget, arr } = args;
 
-	const elId = eventTarget.dataset.id;
-	const itemToRemove = arr.find((item) => item.id === Number(elId));
+	const currentItem = findCurrentItem({ eventTarget, arr });
 
-	if (itemToRemove) {
-		const index = arr.indexOf(itemToRemove);
+	if (currentItem) {
+		const index = arr.indexOf(currentItem);
 
 		if (index > -1) {
 			arr.splice(index, 1);
+		}
+	}
+};
+
+const editItemInDom = (args: EditItemInDomArgs) => {
+	return new Promise((resolve) => {
+		const { eventTarget } = args;
+
+		let text = eventTarget.textContent;
+
+		const input = document.createElement('input');
+		input.type = 'text';
+		input.value = text || '';
+
+		eventTarget.textContent = '';
+		eventTarget.appendChild(input);
+
+		input.focus();
+
+		input.addEventListener('keypress', (e: KeyboardEvent) => {
+			if (e.key === 'Enter') {
+				input.blur();
+			}
+		});
+
+		input.addEventListener('blur', () => {
+			const newText = input.value.trim();
+
+			if (text !== newText) {
+				eventTarget.textContent = newText;
+			}
+			resolve(newText);
+		});
+	});
+};
+
+const editItemInArray = async (args: EditItemInArrayArgs) => {
+	const { eventTarget, arr } = args;
+
+	const currentItem = findCurrentItem({ eventTarget, arr });
+
+	if (currentItem) {
+		const index = arr.indexOf(currentItem);
+
+		if (index > -1) {
+			const updatedText = await editItemInDom({ eventTarget });
+			
+			if (updatedText !== arr[index].todo) {
+				arr[index].todo = updatedText;
+			}
 		}
 	}
 };
@@ -59,4 +126,4 @@ const downloadCsv = (args: DownloadCsvArgs) => {
 	URL.revokeObjectURL(url);
 };
 
-export { createContextMenuItem, deleteItemFromDom,deleteItemFromArray, downloadCsv };
+export { createContextMenuItem, deleteItemFromDom, deleteItemFromArray, editItemInDom, editItemInArray, downloadCsv };
