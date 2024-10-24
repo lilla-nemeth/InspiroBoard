@@ -178,3 +178,21 @@ body,
 .todo-element:last-child {
 	border: unset;
 }
+
+/* Context Menu */
+.context-menu {
+	position: absolute;
+	background-color: #fff;
+	display: none;
+	z-index: 500;
+	cursor: pointer;
+	width: 10em;
+}
+
+.context-menu.visible {
+	display: block;
+}
+
+.context-menu-actions {
+	padding: 1rem;
+}
