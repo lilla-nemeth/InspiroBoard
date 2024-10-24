@@ -9,13 +9,18 @@ todoList.id = 'todo-list';
 todoList.className = 'todo-list';
 contentContainer.appendChild(todoList);
 
-const listItems = [{ todo: 'Shopping' }, { todo: 'Reading' }, { todo: 'Cooking' }, { todo: 'Running' }];
+const listItems = [
+	{ id: 1, todo: 'Shopping' },
+	{ id: 2, todo: 'Reading' },
+	{ id: 3, todo: 'Cooking' },
+	{ id: 4, todo: 'Running' },
+];
 
 for (let i = 0; i < listItems.length; i++) {
 	const todoListElement = document.createElement('li');
 
 	todoListElement.className = 'todo-element';
-	todoListElement.id = listItems[i].todo.toLowerCase();
+	todoListElement.id = `list-item-${listItems[i].id}`;
 	todoListElement.textContent = listItems[i].todo;
 
 	todoList.appendChild(todoListElement);
