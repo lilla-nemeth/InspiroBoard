@@ -1,5 +1,7 @@
 'use strict';
 
+import { createContextMenuItem } from './utils/helpers';
+
 const todoList = <HTMLElement>document.getElementById('todo-list');
 // const shopping = <HTMLElement>document.getElementById('shopping');
 // const reading = <HTMLElement>document.getElementById('reading');
@@ -11,17 +13,21 @@ contextMenu.className = 'context-menu';
 
 const contextList = document.createElement('ul');
 
-const contextDelete = document.createElement('li');
-contextDelete.className = 'context-menu-actions';
-contextDelete.id = 'context-menu-delete';
-contextDelete.textContent = 'Delete';
-contextList.appendChild(contextDelete);
+createContextMenuItem({
+	document: document,
+	contextList: contextList,
+	text: 'Delete',
+	styleId: 'context-menu-delete',
+	styleClass: 'context-menu-actions',
+});
 
-const contextEdit = document.createElement('li');
-contextEdit.className = 'context-menu-actions';
-contextEdit.id = 'context-menu-edit';
-contextEdit.textContent = 'Edit';
-contextList.appendChild(contextEdit);
+createContextMenuItem({
+	document: document,
+	contextList: contextList,
+	text: 'Edit',
+	styleId: 'context-menu-edit',
+	styleClass: 'context-menu-actions',
+});
 
 contextMenu.appendChild(contextList);
 document.body.appendChild(contextMenu);
