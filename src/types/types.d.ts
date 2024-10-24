@@ -1,4 +1,4 @@
-interface contextMenuItemArguments {
+interface ContextMenuItemArgs {
 	document: Document;
 	contextList: HTMLUListElement;
 	text: string;
@@ -6,9 +6,22 @@ interface contextMenuItemArguments {
 	styleClass: string;
 }
 
-interface deleteListItemArguments {
+interface DeleteListItemArgs {
 	styleId?: string;
 	eventTarget: HTMLElement;
 }
 
-export type { contextMenuItemArguments, deleteListItemArguments };
+interface ConvertToCsvArgs {
+	arr: ListItem<string>[];
+}
+
+interface ListItem {
+	todo: string;
+}
+
+interface DownloadCsvArgs {
+	array: ListItem<string>[];
+	filename: string;
+}
+
+export type { ContextMenuItemArgs, DeleteListItemArgs, ConvertToCsvArgs, DownloadCsvArgs };

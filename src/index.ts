@@ -1,6 +1,6 @@
 'use strict';
 
-import { createContextMenuItem, deleteListItem } from './utils/helpers';
+import { createContextMenuItem, deleteListItem, downloadCsv } from './utils/helpers';
 
 const contentContainer = document.getElementById('content-container') as HTMLElement;
 
@@ -85,6 +85,9 @@ document.addEventListener('click', (e: MouseEvent) => {
 				deleteListItem({ eventTarget: currentTarget });
 				currentTarget = null;
 			}
+			break;
+		case 'context-menu-csv':
+			downloadCsv({ array: listItems, filename: 'list.csv' });
 			break;
 		default:
 			'';
