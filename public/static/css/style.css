@@ -185,8 +185,8 @@ body,
 	background-color: #fff;
 	display: none;
 	z-index: 500;
-	cursor: pointer;
 	width: 10em;
+	cursor: default;
 }
 
 .context-menu.visible {
