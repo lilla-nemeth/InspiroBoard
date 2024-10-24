@@ -128,3 +128,72 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+/* CSS Reset ends */
+html,
+body,
+.main-container {
+	height: 100%;
+}
+
+.main-container {
+	background-color: rgb(150, 188, 174);
+	display: flex;
+	flex-direction: column;
+	padding: 0 20em;
+}
+
+.headline-container,
+.content-container {
+	padding: 2rem;
+}
+
+.headline-container {
+	display: flex;
+	background-color: rgb(81, 126, 110);
+	justify-content: center;
+}
+
+.title {
+	font-size: 3rem;
+}
+
+.content-container {
+	background-color: rgb(199, 229, 219);
+	flex: 1;
+}
+
+.todo-list {
+	cursor: pointer;
+	list-style: none;
+}
+
+.todo-element {
+	padding: 1rem;
+}
+
+.todo-element {
+	border-bottom: 0.1rem solid rgb(81, 126, 110);
+	background-color: rgb(224, 246, 238);
+}
+
+.todo-element:last-child {
+	border: unset;
+}
+
+/* Context Menu */
+.context-menu {
+	position: absolute;
+	background-color: #fff;
+	display: none;
+	z-index: 500;
+	width: 10em;
+	cursor: default;
+}
+
+.context-menu.visible {
+	display: block;
+}
+
+.context-menu-actions {
+	padding: 1rem;
+}
