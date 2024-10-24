@@ -15,9 +15,7 @@ const createContextMenuItem = (args: contextMenuItemArguments) => {
 const deleteListItem = (args: deleteListItemArguments) => {
 	const { eventTarget } = args;
 
-	if (eventTarget) {
-		eventTarget.parentElement?.removeChild(eventTarget);
-	}
+	eventTarget?.parentElement?.removeChild(eventTarget);
 };
 
 export { createContextMenuItem, deleteListItem };

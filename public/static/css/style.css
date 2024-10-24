@@ -164,6 +164,7 @@ body,
 
 .todo-list {
 	cursor: pointer;
+	list-style: none;
 }
 
 .todo-element {
