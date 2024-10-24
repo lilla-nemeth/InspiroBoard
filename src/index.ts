@@ -48,4 +48,14 @@ if (todoList) {
 	todoList.addEventListener('contextmenu', addContextMenu);
 }
 
-document.addEventListener('click', hideContextMenu);
+document.addEventListener('click', (e: MouseEvent) => {
+	const target = <HTMLElement>e.target;
+
+	if (target.id === 'context-menu-edit') {
+		console.log('Edit');
+	} else if (target.id === 'context-menu-delete') {
+		console.log('Delete');
+	}
+
+	hideContextMenu();
+});
