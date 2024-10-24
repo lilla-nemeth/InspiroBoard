@@ -1,8 +1,8 @@
 'use strict';
 
-import { createContextMenuItem } from './utils/helpers';
+import { createContextMenuItem, deleteListItem } from './utils/helpers';
 
-const todoList = <HTMLElement>document.getElementById('todo-list');
+const todoList = document.getElementById('todo-list') as HTMLElement;
 // const shopping = <HTMLElement>document.getElementById('shopping');
 // const reading = <HTMLElement>document.getElementById('reading');
 // const cooking = <HTMLElement>document.getElementById('cooking');
@@ -44,18 +44,24 @@ const hideContextMenu = () => {
 	contextMenu.classList.remove('visible');
 };
 
-if (todoList) {
-	todoList.addEventListener('contextmenu', addContextMenu);
-}
+todoList.addEventListener('contextmenu', (e: MouseEvent) => {
+	addContextMenu(e);
+	const listTarget = e.target as HTMLElement;
 
-document.addEventListener('click', (e: MouseEvent) => {
-	const target = <HTMLElement>e.target;
+	document.addEventListener('click', (e: MouseEvent) => {
+		const target = e.target as HTMLElement;
 
-	if (target.id === 'context-menu-edit') {
-		console.log('Edit');
-	} else if (target.id === 'context-menu-delete') {
-		console.log('Delete');
-	}
+		switch (target.id) {
+			case 'context-menu-edit':
+				console.log('Edit');
+				break;
+			case 'context-menu-delete':
+				deleteListItem({ eventTarget: listTarget });
+				break;
+			default:
+				'';
+		}
 
-	hideContextMenu();
+		hideContextMenu();
+	});
 });

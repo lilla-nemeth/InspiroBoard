@@ -1,4 +1,4 @@
-interface contextMenuItem {
+interface contextMenuItemArguments {
 	document: Document;
 	contextList: HTMLUListElement;
 	text: string;
@@ -6,4 +6,9 @@ interface contextMenuItem {
 	styleClass: string;
 }
 
-export type { contextMenuItem };
+interface deleteListItemArguments {
+	styleId?: string;
+	eventTarget: HTMLElement;
+}
+
+export type { contextMenuItemArguments, deleteListItemArguments };

@@ -1,6 +1,6 @@
-import type { contextMenuItem } from '../types/types';
+import type { contextMenuItemArguments, deleteListItemArguments } from '../types/types';
 
-export const createContextMenuItem = (args: contextMenuItem) => {
+const createContextMenuItem = (args: contextMenuItemArguments) => {
 	const { contextList, text, styleId, styleClass } = args;
 
 	const contextDelete = document.createElement('li');
@@ -11,3 +11,13 @@ export const createContextMenuItem = (args: contextMenuItem) => {
 
 	contextList.appendChild(contextDelete);
 };
+
+const deleteListItem = (args: deleteListItemArguments) => {
+	const { eventTarget } = args;
+
+	if (eventTarget) {
+		eventTarget.parentElement?.removeChild(eventTarget);
+	}
+};
+
+export { createContextMenuItem, deleteListItem };
