@@ -7,7 +7,47 @@ import type {
 	EditItemInDomArgs,
 	EditItemInArrayArgs,
 	FindCurrentItemArgs,
+	MapImagesArgs,
+	MapTextsArgs,
 } from '../types/types';
+
+const mapTexts = (args: MapTextsArgs) => {
+	const { images } = args;
+};
+
+const mapImages = (args: MapImagesArgs) => {
+	const { images, container } = args;
+
+	const imgs = images.map((img) => {
+		const imgWrapper = document.createElement('div');
+		imgWrapper.className = 'image-wrapper';
+		imgWrapper.id = `image-text-${img.id}`;
+		imgWrapper.setAttribute('data-id', img.id.toString());
+
+		const imgElement = document.createElement('img');
+		imgElement.className = 'image';
+		imgElement.loading = 'lazy';
+		imgElement.src = img.url;
+
+		const imgText = document.createElement('div');
+		imgText.className = 'image-text';
+
+		imgText.textContent = img.text;
+
+		imgWrapper.appendChild(imgElement);
+		imgWrapper.appendChild(imgText);
+		return imgWrapper;
+	});
+
+	const imgsContainer = document.createElement('div');
+	imgsContainer.className = 'image-container';
+
+	imgs.forEach((img) => {
+		imgsContainer.appendChild(img);
+	});
+
+	container.appendChild(imgsContainer);
+};
 
 const createContextMenuItem = (args: ContextMenuItemArgs) => {
 	const { contextList, text, styleId, styleClass } = args;
@@ -24,16 +64,22 @@ const createContextMenuItem = (args: ContextMenuItemArgs) => {
 const findCurrentItem = (args: FindCurrentItemArgs) => {
 	const { eventTarget, arr } = args;
 
-	const elId = eventTarget.dataset.id;
-	const currentItem = arr.find((item) => item.id === Number(elId));
+	const parentWrapper = eventTarget.closest('.image-wrapper') as HTMLElement | null;
 
-	return currentItem;
+	if (parentWrapper) {
+		const itemId = parentWrapper.dataset?.id;
+		const currentItem = arr.find((item) => item.id === Number(itemId));
+
+		return currentItem;
+	}
 };
 
 const deleteItemFromDom = (args: DeleteItemFromDomArgs) => {
-	const { eventTarget } = args;
+	const { eventTarget, styleClass } = args;
 
-	eventTarget?.parentElement?.removeChild(eventTarget);
+	const parentWrapper = eventTarget?.closest(styleClass) as HTMLElement | null;
+
+	parentWrapper?.remove();
 };
 
 const deleteItemFromArray = (args: DeleteItemFromArrayArgs) => {
@@ -54,31 +100,39 @@ const editItemInDom = (args: EditItemInDomArgs) => {
 	return new Promise((resolve) => {
 		const { eventTarget } = args;
 
-		let text = eventTarget.textContent;
+		const parentWrapper = eventTarget.closest('.image-wrapper') as HTMLElement | null;
 
-		const input = document.createElement('input');
-		input.type = 'text';
-		input.value = text || '';
+		if (parentWrapper) {
+			const imageText = parentWrapper.querySelector('.image-text') as HTMLElement;
 
-		eventTarget.textContent = '';
-		eventTarget.appendChild(input);
+			let text = imageText.textContent;
 
-		input.focus();
+			const input = document.createElement('input');
+			input.type = 'text';
+			input.value = text || '';
+			input.className = 'image-input'
 
-		input.addEventListener('keypress', (e: KeyboardEvent) => {
-			if (e.key === 'Enter') {
-				input.blur();
-			}
-		});
+			imageText.textContent = '';
+			imageText.appendChild(input);
 
-		input.addEventListener('blur', () => {
-			const newText = input.value.trim();
+			input.focus();
+			input.select();
 
-			if (text !== newText) {
-				eventTarget.textContent = newText;
-			}
-			resolve(newText);
-		});
+			input.addEventListener('keypress', (e: KeyboardEvent) => {
+				if (e.key === 'Enter') {
+					input.blur();
+				}
+			});
+
+			input.addEventListener('blur', () => {
+				const newText = input.value.trim();
+
+				if (text !== newText) {
+					imageText.textContent = newText;
+				}
+				resolve(newText);
+			});
+		}
 	});
 };
 
@@ -91,11 +145,9 @@ const editItemInArray = async (args: EditItemInArrayArgs) => {
 		const index = arr.indexOf(currentItem);
 
 		if (index > -1) {
-			const updatedText = await editItemInDom({ eventTarget });
-			
-			if (updatedText !== arr[index].todo) {
-				arr[index].todo = updatedText;
-			}
+			const updatedText: string = (await editItemInDom({ eventTarget })) as string;
+
+			arr[index].text = updatedText;
 		}
 	}
 };
@@ -103,19 +155,17 @@ const editItemInArray = async (args: EditItemInArrayArgs) => {
 const convertToCsv = (args: ConvertToCsvArgs) => {
 	const { arr } = args;
 
-	const array = [Object.keys(arr[0])].concat(arr);
+	const headers = Object.keys(arr[0]).join(',');
+	const rows = arr.map((el) => Object.values(el).join(','));
 
-	return array
-		.map((item) => {
-			return Object.values(item).toString();
-		})
-		.join('\n');
+	return [headers, ...rows].join('\n');
 };
 
 const downloadCsv = (args: DownloadCsvArgs) => {
 	const { array, filename } = args;
 
 	const data = convertToCsv({ arr: array });
+
 	const blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
 	const url = URL.createObjectURL(blob);
 
@@ -126,4 +176,4 @@ const downloadCsv = (args: DownloadCsvArgs) => {
 	URL.revokeObjectURL(url);
 };
 
-export { createContextMenuItem, deleteItemFromDom, deleteItemFromArray, editItemInDom, editItemInArray, downloadCsv };
+export { mapImages, createContextMenuItem, deleteItemFromDom, deleteItemFromArray, editItemInDom, editItemInArray, downloadCsv };

@@ -130,8 +130,7 @@ table {
 }
 /* CSS Reset ends */
 html,
-body,
-.main-container {
+body {
 	height: 100%;
 }
 
@@ -144,12 +143,11 @@ body,
 
 .headline-container,
 .content-container {
-	padding: 2rem;
+	padding: 4rem 2rem;
 }
 
 .headline-container {
 	display: flex;
-	background-color: rgb(81, 126, 110);
 	justify-content: center;
 }
 
@@ -160,24 +158,40 @@ body,
 .content-container {
 	background-color: rgb(199, 229, 219);
 	flex: 1;
+	border-radius: 2rem;
 }
 
-.todo-list {
+.image-container {
+	display: flex;
+	justify-content: center;
+	flex-flow: row wrap;
+	gap: 1rem;
+}
+
+.image-wrapper {
+	display: flex;
+	flex-direction: column;
+	width: 30%;
 	cursor: pointer;
-	list-style: none;
 }
 
-.todo-element {
+.image {
+	object-fit: cover;
+	border-radius: 1rem 1rem 0 0;
+}
+
+.image-text {
+	display: flex;
+	align-items: start;
 	padding: 1rem;
-}
-
-.todo-element {
-	border-bottom: 0.1rem solid rgb(81, 126, 110);
 	background-color: rgb(224, 246, 238);
+	height: 5rem;
+	border-radius: 0 0 1rem 1rem;
 }
 
-.todo-element:last-child {
-	border: unset;
+.image-input {
+	padding: 0.25rem;
+	width: 100%;
 }
 
 /* Context Menu */

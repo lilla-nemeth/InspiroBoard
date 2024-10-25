@@ -1,3 +1,18 @@
+interface MapTextsArgs {
+	images: Image[];
+}
+
+interface MapImagesArgs {
+	images: Image[];
+	container: HTMLElement;
+}
+
+interface Image {
+	id: number;
+	url: string;
+	text: string;
+}
+
 interface ContextMenuItemArgs {
 	document: Document;
 	contextList: HTMLUListElement;
@@ -8,16 +23,17 @@ interface ContextMenuItemArgs {
 
 interface FindCurrentItemArgs {
 	eventTarget: HTMLElement;
-	arr: ListItem<string>[];
+	arr: Image[];
 }
 
 interface DeleteItemFromDomArgs {
 	eventTarget: HTMLElement;
+	styleClass: string;
 }
 
 interface DeleteItemFromArrayArgs {
 	eventTarget: HTMLElement;
-	arr: ListItem<string>[];
+	arr: Image[];
 }
 
 interface EditItemInDomArgs {
@@ -26,23 +42,22 @@ interface EditItemInDomArgs {
 
 interface EditItemInArrayArgs {
 	eventTarget: HTMLElement;
-	arr: ListItem<string>[];
+	arr: Image[];
 }
 
 interface ConvertToCsvArgs {
-	arr: ListItem<string>[];
-}
-
-interface ListItem {
-	todo: string;
+	arr: Image[];
 }
 
 interface DownloadCsvArgs {
-	array: ListItem<string>[];
+	array: Image[];
 	filename: string;
 }
 
 export type {
+	Image,
+	MapTextsArgs,
+	MapImagesArgs,
 	ContextMenuItemArgs,
 	DeleteItemFromDomArgs,
 	DeleteItemFromArrayArgs,
