@@ -7,9 +7,22 @@ import {
 	downloadCsv,
 	editItemInDom,
 	editItemInArray,
+	mapImages,
 } from './utils/helpers';
 
+import { fetchImages } from './services/fetchImages';
+
 const contentContainer = document.getElementById('content-container') as HTMLElement;
+
+(async () => {
+	try {
+		const images = await fetchImages();
+		mapImages({ images, container: contentContainer });
+	} catch (err) {
+		console.log(err);
+		throw new Error();
+	}
+})();
 
 const todoList = document.createElement('ul');
 todoList.id = 'todo-list';

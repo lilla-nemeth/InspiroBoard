@@ -7,7 +7,31 @@ import type {
 	EditItemInDomArgs,
 	EditItemInArrayArgs,
 	FindCurrentItemArgs,
+	MapImagesArgs,
 } from '../types/types';
+
+// const mapTexts = (args: MapTextsArgs) => {
+
+// }
+
+const mapImages = (args: MapImagesArgs) => {
+	const { images, container } = args;
+
+	const imgs = images.map((img) => {
+		const item = document.createElement('img');
+		item.src = img.url;
+		item.loading = 'lazy';
+		item.className = 'images';
+		return item;
+	});
+
+	const imgContainer = document.createElement('div');
+	imgContainer.className = 'image-container';
+
+	imgs.forEach((img) => imgContainer.appendChild(img));
+
+	container.appendChild(imgContainer);
+};
 
 const createContextMenuItem = (args: ContextMenuItemArgs) => {
 	const { contextList, text, styleId, styleClass } = args;
@@ -92,7 +116,7 @@ const editItemInArray = async (args: EditItemInArrayArgs) => {
 
 		if (index > -1) {
 			const updatedText = await editItemInDom({ eventTarget });
-			
+
 			if (updatedText !== arr[index].todo) {
 				arr[index].todo = updatedText;
 			}
@@ -126,4 +150,4 @@ const downloadCsv = (args: DownloadCsvArgs) => {
 	URL.revokeObjectURL(url);
 };
 
-export { createContextMenuItem, deleteItemFromDom, deleteItemFromArray, editItemInDom, editItemInArray, downloadCsv };
+export { mapImages, createContextMenuItem, deleteItemFromDom, deleteItemFromArray, editItemInDom, editItemInArray, downloadCsv };

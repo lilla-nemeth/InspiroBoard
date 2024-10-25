@@ -1,3 +1,13 @@
+interface MapImagesArgs {
+	images: Image[];
+	container: HTMLElement;
+}
+
+interface Image {
+	id: number;
+	url: string;
+}
+
 interface ContextMenuItemArgs {
 	document: Document;
 	contextList: HTMLUListElement;
@@ -43,6 +53,7 @@ interface DownloadCsvArgs {
 }
 
 export type {
+	MapImagesArgs,
 	ContextMenuItemArgs,
 	DeleteItemFromDomArgs,
 	DeleteItemFromArrayArgs,
