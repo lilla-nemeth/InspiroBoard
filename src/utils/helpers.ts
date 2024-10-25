@@ -67,8 +67,8 @@ const findCurrentItem = (args: FindCurrentItemArgs) => {
 	const parentWrapper = eventTarget.closest('.image-wrapper') as HTMLElement | null;
 
 	if (parentWrapper) {
-		const elId = parentWrapper.dataset?.id;
-		const currentItem = arr.find((item) => item.id === Number(elId));
+		const itemId = parentWrapper.dataset?.id;
+		const currentItem = arr.find((item) => item.id === Number(itemId));
 
 		return currentItem;
 	}
@@ -77,7 +77,7 @@ const findCurrentItem = (args: FindCurrentItemArgs) => {
 const deleteItemFromDom = (args: DeleteItemFromDomArgs) => {
 	const { eventTarget, styleClass } = args;
 
-	const parentWrapper = eventTarget?.closest(styleClass);
+	const parentWrapper = eventTarget?.closest(styleClass) as HTMLElement | null;
 
 	parentWrapper?.remove();
 };
@@ -100,32 +100,38 @@ const editItemInDom = (args: EditItemInDomArgs) => {
 	return new Promise((resolve) => {
 		const { eventTarget } = args;
 
-		let text = eventTarget.textContent;
+		const parentWrapper = eventTarget.closest('.image-wrapper') as HTMLElement | null;
 
-		const input = document.createElement('input');
-		input.type = 'text';
-		input.value = text || '';
+		if (parentWrapper) {
+			const imageText = parentWrapper.querySelector('.image-text') as HTMLElement;
 
-		eventTarget.textContent = '';
-		eventTarget.appendChild(input);
+			let text = imageText.textContent;
 
-		input.focus();
-		input.select();
+			const input = document.createElement('input');
+			input.type = 'text';
+			input.value = text || '';
 
-		input.addEventListener('keypress', (e: KeyboardEvent) => {
-			if (e.key === 'Enter') {
-				input.blur();
-			}
-		});
+			imageText.textContent = '';
+			imageText.appendChild(input);
 
-		input.addEventListener('blur', () => {
-			const newText = input.value.trim();
+			input.focus();
+			input.select();
 
-			if (text !== newText) {
-				eventTarget.textContent = newText;
-			}
-			resolve(newText);
-		});
+			input.addEventListener('keypress', (e: KeyboardEvent) => {
+				if (e.key === 'Enter') {
+					input.blur();
+				}
+			});
+
+			input.addEventListener('blur', () => {
+				const newText = input.value.trim();
+
+				if (text !== newText) {
+					imageText.textContent = newText;
+				}
+				resolve(newText);
+			});
+		}
 	});
 };
 
@@ -138,12 +144,9 @@ const editItemInArray = async (args: EditItemInArrayArgs) => {
 		const index = arr.indexOf(currentItem);
 
 		if (index > -1) {
-			const updatedText = await editItemInDom({ eventTarget });
+			const updatedText: string = (await editItemInDom({ eventTarget })) as string;
 
-			// TODO: fix this ->
-			// if (updatedText !== arr[index].text) {
-			// 	arr[index].text = updatedText;
-			// }
+			arr[index].text = updatedText;
 		}
 	}
 };

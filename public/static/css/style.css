@@ -180,6 +180,8 @@ body {
 }
 
 .image-text {
+	display: flex;
+	align-items: center;
 	padding: 1rem;
 	background-color: rgb(224, 246, 238);
 	height: 2.5rem;
