@@ -21,6 +21,8 @@ const mapImages = (args: MapImagesArgs) => {
 	const imgs = images.map((img) => {
 		const imgWrapper = document.createElement('div');
 		imgWrapper.className = 'image-wrapper';
+		imgWrapper.id = `image-text-${img.id}`;
+		imgWrapper.setAttribute('data-id', img.id.toString());
 
 		const imgElement = document.createElement('img');
 		imgElement.className = 'image';
@@ -29,9 +31,8 @@ const mapImages = (args: MapImagesArgs) => {
 
 		const imgText = document.createElement('div');
 		imgText.className = 'image-text';
-		imgText.id = `image-text-${img.id}`;
+
 		imgText.textContent = img.text;
-		imgText.setAttribute('data-id', img.id.toString());
 
 		imgWrapper.appendChild(imgElement);
 		imgWrapper.appendChild(imgText);
@@ -63,10 +64,14 @@ const createContextMenuItem = (args: ContextMenuItemArgs) => {
 const findCurrentItem = (args: FindCurrentItemArgs) => {
 	const { eventTarget, arr } = args;
 
-	const elId = eventTarget.dataset.id;
-	const currentItem = arr.find((item) => item.id === Number(elId));
+	const parentWrapper = eventTarget.closest('.image-wrapper') as HTMLElement | null;
 
-	return currentItem;
+	if (parentWrapper) {
+		const elId = parentWrapper.dataset?.id;
+		const currentItem = arr.find((item) => item.id === Number(elId));
+
+		return currentItem;
+	}
 };
 
 const deleteItemFromDom = (args: DeleteItemFromDomArgs) => {
@@ -136,9 +141,9 @@ const editItemInArray = async (args: EditItemInArrayArgs) => {
 			const updatedText = await editItemInDom({ eventTarget });
 
 			// TODO: fix this ->
-			if (updatedText !== arr[index].text) {
-				arr[index].text = updatedText;
-			}
+			// if (updatedText !== arr[index].text) {
+			// 	arr[index].text = updatedText;
+			// }
 		}
 	}
 };
