@@ -177,14 +177,21 @@ body {
 
 .image {
 	object-fit: cover;
+	border-radius: 1rem 1rem 0 0;
 }
 
 .image-text {
 	display: flex;
-	align-items: center;
+	align-items: start;
 	padding: 1rem;
 	background-color: rgb(224, 246, 238);
-	height: 2.5rem;
+	height: 5rem;
+	border-radius: 0 0 1rem 1rem;
+}
+
+.image-input {
+	padding: 0.25rem;
+	width: 100%;
 }
 
 /* Context Menu */
