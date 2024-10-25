@@ -11,12 +11,25 @@ import type {
 	MapTextsArgs,
 } from '../types/types';
 
+const fetchOriginalUrls = async (img: any) => {
+	try {
+		const response = await fetch(img.url);
+		if (response.ok) {
+			img.url = response.url;
+		}
+	} catch (error) {
+		console.error('Failed to fetch original URLs', error);
+	}
+};
+
 const mapTexts = (args: MapTextsArgs) => {
 	const { images } = args;
 };
 
-const mapImages = (args: MapImagesArgs) => {
+const mapImages = async (args: MapImagesArgs) => {
 	const { images, container } = args;
+
+	await Promise.all(images.map(fetchOriginalUrls));
 
 	const imgs = images.map((img) => {
 		const imgWrapper = document.createElement('div');
@@ -31,7 +44,6 @@ const mapImages = (args: MapImagesArgs) => {
 
 		const imgText = document.createElement('div');
 		imgText.className = 'image-text';
-
 		imgText.textContent = img.text;
 
 		imgWrapper.appendChild(imgElement);
@@ -110,7 +122,7 @@ const editItemInDom = (args: EditItemInDomArgs) => {
 			const input = document.createElement('input');
 			input.type = 'text';
 			input.value = text || '';
-			input.className = 'image-input'
+			input.className = 'image-input';
 
 			imageText.textContent = '';
 			imageText.appendChild(input);
