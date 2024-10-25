@@ -195,17 +195,22 @@ body {
 }
 
 /* Context Menu */
-.context-menu {
+.context-menu-wrapper {
 	position: absolute;
 	background-color: #fff;
 	display: none;
 	z-index: 500;
-	width: 10em;
+	width: 12em;
 	cursor: default;
+	border-radius: 1rem;
 }
 
-.context-menu.visible {
+.context-menu-wrapper.visible {
 	display: block;
+}
+
+.context-menu {
+	padding: 0.5rem;
 }
 
 .context-menu-actions {

@@ -27,9 +27,10 @@ let images: Image[] = [];
 })();
 
 const contextMenu = document.createElement('div');
-contextMenu.className = 'context-menu';
+contextMenu.className = 'context-menu-wrapper';
 
 const contextList = document.createElement('ul');
+contextList.className = 'context-menu';
 
 createContextMenuItem({
 	document: document,
