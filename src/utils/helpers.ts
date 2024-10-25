@@ -135,8 +135,9 @@ const editItemInArray = async (args: EditItemInArrayArgs) => {
 		if (index > -1) {
 			const updatedText = await editItemInDom({ eventTarget });
 
-			if (updatedText !== arr[index].todo) {
-				arr[index].todo = updatedText;
+			// TODO: fix this ->
+			if (updatedText !== arr[index].text) {
+				arr[index].text = updatedText;
 			}
 		}
 	}
@@ -145,19 +146,17 @@ const editItemInArray = async (args: EditItemInArrayArgs) => {
 const convertToCsv = (args: ConvertToCsvArgs) => {
 	const { arr } = args;
 
-	const array = [Object.keys(arr[0])].concat(arr);
+	const headers = Object.keys(arr[0]).join(',');
+	const rows = arr.map((el) => Object.values(el).join(','));
 
-	return array
-		.map((item) => {
-			return Object.values(item).toString();
-		})
-		.join('\n');
+	return [headers, ...rows].join('\n');
 };
 
 const downloadCsv = (args: DownloadCsvArgs) => {
 	const { array, filename } = args;
 
 	const data = convertToCsv({ arr: array });
+
 	const blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
 	const url = URL.createObjectURL(blob);
 

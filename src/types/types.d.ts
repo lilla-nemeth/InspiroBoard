@@ -23,7 +23,7 @@ interface ContextMenuItemArgs {
 
 interface FindCurrentItemArgs {
 	eventTarget: HTMLElement;
-	arr: ListItem<string>[];
+	arr: Image[];
 }
 
 interface DeleteItemFromDomArgs {
@@ -33,7 +33,7 @@ interface DeleteItemFromDomArgs {
 
 interface DeleteItemFromArrayArgs {
 	eventTarget: HTMLElement;
-	arr: ListItem<string>[];
+	arr: Image[];
 }
 
 interface EditItemInDomArgs {
@@ -42,19 +42,15 @@ interface EditItemInDomArgs {
 
 interface EditItemInArrayArgs {
 	eventTarget: HTMLElement;
-	arr: ListItem<string>[];
+	arr: Image[];
 }
 
 interface ConvertToCsvArgs {
-	arr: ListItem<string>[];
-}
-
-interface ListItem {
-	todo: string;
+	arr: Image[];
 }
 
 interface DownloadCsvArgs {
-	array: ListItem<string>[];
+	array: Image[];
 	filename: string;
 }
 

@@ -18,7 +18,7 @@ let images: Image[] = [];
 
 (async () => {
 	try {
-		const images = await fetchImages();
+		images = await fetchImages();
 		mapImages({ images, container: contentContainer });
 	} catch (err) {
 		console.log(err);
