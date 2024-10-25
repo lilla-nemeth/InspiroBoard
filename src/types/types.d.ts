@@ -1,3 +1,7 @@
+interface MapTextsArgs {
+	images: Image[];
+}
+
 interface MapImagesArgs {
 	images: Image[];
 	container: HTMLElement;
@@ -6,6 +10,7 @@ interface MapImagesArgs {
 interface Image {
 	id: number;
 	url: string;
+	text: string;
 }
 
 interface ContextMenuItemArgs {
@@ -23,6 +28,7 @@ interface FindCurrentItemArgs {
 
 interface DeleteItemFromDomArgs {
 	eventTarget: HTMLElement;
+	styleClass: string;
 }
 
 interface DeleteItemFromArrayArgs {
@@ -53,6 +59,8 @@ interface DownloadCsvArgs {
 }
 
 export type {
+	Image,
+	MapTextsArgs,
 	MapImagesArgs,
 	ContextMenuItemArgs,
 	DeleteItemFromDomArgs,

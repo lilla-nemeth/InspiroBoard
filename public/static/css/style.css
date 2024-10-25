@@ -162,22 +162,28 @@ body,
 	flex: 1;
 }
 
-.todo-list {
+.image-container {
+	display: flex;
+	justify-content: center;
+	flex-flow: row wrap;
+	gap: 1rem;
+}
+
+.image-wrapper {
+	display: flex;
+	flex-direction: column;
+	width: 30%;
 	cursor: pointer;
-	list-style: none;
 }
 
-.todo-element {
+.image {
+	object-fit: cover;
+}
+
+.image-text {
 	padding: 1rem;
-}
-
-.todo-element {
-	border-bottom: 0.1rem solid rgb(81, 126, 110);
 	background-color: rgb(224, 246, 238);
-}
-
-.todo-element:last-child {
-	border: unset;
+	height: 2.5rem;
 }
 
 /* Context Menu */

@@ -8,29 +8,44 @@ import type {
 	EditItemInArrayArgs,
 	FindCurrentItemArgs,
 	MapImagesArgs,
+	MapTextsArgs,
 } from '../types/types';
 
-// const mapTexts = (args: MapTextsArgs) => {
-
-// }
+const mapTexts = (args: MapTextsArgs) => {
+	const { images } = args;
+};
 
 const mapImages = (args: MapImagesArgs) => {
 	const { images, container } = args;
 
 	const imgs = images.map((img) => {
-		const item = document.createElement('img');
-		item.src = img.url;
-		item.loading = 'lazy';
-		item.className = 'images';
-		return item;
+		const imgWrapper = document.createElement('div');
+		imgWrapper.className = 'image-wrapper';
+
+		const imgElement = document.createElement('img');
+		imgElement.className = 'image';
+		imgElement.loading = 'lazy';
+		imgElement.src = img.url;
+
+		const imgText = document.createElement('div');
+		imgText.className = 'image-text';
+		imgText.id = `image-text-${img.id}`;
+		imgText.textContent = img.text;
+		imgText.setAttribute('data-id', img.id.toString());
+
+		imgWrapper.appendChild(imgElement);
+		imgWrapper.appendChild(imgText);
+		return imgWrapper;
 	});
 
-	const imgContainer = document.createElement('div');
-	imgContainer.className = 'image-container';
+	const imgsContainer = document.createElement('div');
+	imgsContainer.className = 'image-container';
 
-	imgs.forEach((img) => imgContainer.appendChild(img));
+	imgs.forEach((img) => {
+		imgsContainer.appendChild(img);
+	});
 
-	container.appendChild(imgContainer);
+	container.appendChild(imgsContainer);
 };
 
 const createContextMenuItem = (args: ContextMenuItemArgs) => {
@@ -55,9 +70,11 @@ const findCurrentItem = (args: FindCurrentItemArgs) => {
 };
 
 const deleteItemFromDom = (args: DeleteItemFromDomArgs) => {
-	const { eventTarget } = args;
+	const { eventTarget, styleClass } = args;
+	
+	const parentWrapper = eventTarget?.closest(styleClass);
 
-	eventTarget?.parentElement?.removeChild(eventTarget);
+	parentWrapper?.remove();
 };
 
 const deleteItemFromArray = (args: DeleteItemFromArrayArgs) => {

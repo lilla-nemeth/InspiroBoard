@@ -11,8 +11,10 @@ import {
 } from './utils/helpers';
 
 import { fetchImages } from './services/fetchImages';
+import type { Image } from './types/types';
 
 const contentContainer = document.getElementById('content-container') as HTMLElement;
+let images: Image[] = [];
 
 (async () => {
 	try {
@@ -23,29 +25,6 @@ const contentContainer = document.getElementById('content-container') as HTMLEle
 		throw new Error();
 	}
 })();
-
-const todoList = document.createElement('ul');
-todoList.id = 'todo-list';
-todoList.className = 'todo-list';
-contentContainer.appendChild(todoList);
-
-const listItems = [
-	{ id: 1, todo: 'Shopping' },
-	{ id: 2, todo: 'Reading' },
-	{ id: 3, todo: 'Cooking' },
-	{ id: 4, todo: 'Running' },
-];
-
-for (let i = 0; i < listItems.length; i++) {
-	const todoListElement = document.createElement('li');
-
-	todoListElement.className = 'todo-element';
-	todoListElement.id = `todo-element-${listItems[i].id}`;
-	todoListElement.textContent = listItems[i].todo;
-	todoListElement.setAttribute('data-id', listItems[i].id.toString());
-
-	todoList.appendChild(todoListElement);
-}
 
 const contextMenu = document.createElement('div');
 contextMenu.className = 'context-menu';
@@ -63,7 +42,7 @@ createContextMenuItem({
 createContextMenuItem({
 	document: document,
 	contextList: contextList,
-	text: 'Edit',
+	text: 'Edit Text',
 	styleId: 'context-menu-edit',
 	styleClass: 'context-menu-actions',
 });
@@ -93,35 +72,36 @@ const hideContextMenu = () => {
 
 let currentTarget: HTMLElement | null = null;
 
-todoList.addEventListener('contextmenu', (e: MouseEvent) => {
-	e.preventDefault();
-	addContextMenu(e);
+contentContainer.addEventListener('contextmenu', (e: MouseEvent) => {
 	currentTarget = e.target as HTMLElement;
+
+	if (currentTarget?.closest('.image-wrapper')) {
+		e.preventDefault();
+		addContextMenu(e);
+	}
 });
 
 document.addEventListener('click', (e: MouseEvent) => {
-	const target = e.target as HTMLElement;
+	let target = e.target as HTMLElement;
 
-	switch (target.id) {
-		case 'context-menu-edit':
-			if (currentTarget) {
+	if (currentTarget) {
+		switch (target.id) {
+			case 'context-menu-edit':
 				editItemInDom({ eventTarget: currentTarget });
-				editItemInArray({ eventTarget: currentTarget, arr: listItems });
+				editItemInArray({ eventTarget: currentTarget!, arr: images });
 				currentTarget = null;
-			}
-			break;
-		case 'context-menu-delete':
-			if (currentTarget) {
-				deleteItemFromArray({ eventTarget: currentTarget, arr: listItems });
-				deleteItemFromDom({ eventTarget: currentTarget });
+				break;
+			case 'context-menu-delete':
+				deleteItemFromArray({ eventTarget: currentTarget, arr: images });
+				deleteItemFromDom({ eventTarget: currentTarget, styleClass: '.image-wrapper' });
 				currentTarget = null;
-			}
-			break;
-		case 'context-menu-csv':
-			downloadCsv({ array: listItems, filename: 'list.csv' });
-			break;
-		default:
-			'';
+				break;
+			case 'context-menu-csv':
+				downloadCsv({ array: images, filename: 'list.csv' });
+				break;
+			default:
+				'';
+		}
 	}
 
 	hideContextMenu();
