@@ -71,7 +71,7 @@ const findCurrentItem = (args: FindCurrentItemArgs) => {
 
 const deleteItemFromDom = (args: DeleteItemFromDomArgs) => {
 	const { eventTarget, styleClass } = args;
-	
+
 	const parentWrapper = eventTarget?.closest(styleClass);
 
 	parentWrapper?.remove();
@@ -105,6 +105,7 @@ const editItemInDom = (args: EditItemInDomArgs) => {
 		eventTarget.appendChild(input);
 
 		input.focus();
+		input.select();
 
 		input.addEventListener('keypress', (e: KeyboardEvent) => {
 			if (e.key === 'Enter') {
