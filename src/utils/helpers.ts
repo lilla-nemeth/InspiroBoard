@@ -129,12 +129,12 @@ const editItemInDom = (args: EditItemInDomArgs) => {
 			input.value = text as string;
 			input.className = 'image-input';
 
-			imageText.style.display = 'none';
 			imageText.innerHTML = input.value;
 			imageTextContainer.appendChild(input);
 
 			input.focus();
 			input.select();
+			imageText.style.display = 'none';
 
 			input.addEventListener('blur', (e) => {
 				const newText = input.value.trim();
@@ -144,13 +144,8 @@ const editItemInDom = (args: EditItemInDomArgs) => {
 				}
 
 				input.remove();
+				imageText.style.display = 'block';
 				resolve(newText);
-			});
-
-			input.addEventListener('change', (e) => {
-				if (e.target !== imageText) {
-					imageText.style.display = 'block';
-				}
 			});
 
 			input.addEventListener('keypress', (e) => {

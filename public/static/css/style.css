@@ -215,8 +215,8 @@ body {
 }
 
 .image-text {
-	position: absolute;
-	width: 100%;
+	/* position: absolute; */
+	/* width: 100%; */
 	text-align: left;
 	word-break: break-all;
 }
