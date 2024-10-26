@@ -9,8 +9,6 @@ interface CreateHtmlElementArgs {
 	elSrc?: DomElementAttribute;
 }
 
-interface CreateContextMenuArgs {}
-
 interface MapImagesArgs {
 	images: Image[];
 	container: HTMLElement;
@@ -57,7 +55,6 @@ interface DownloadCsvArgs {
 
 export type {
 	Image,
-	CreateContextMenuArgs,
 	CreateHtmlElementArgs,
 	MapImagesArgs,
 	DeleteItemFromDomArgs,

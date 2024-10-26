@@ -8,7 +8,6 @@ import type {
 	FindCurrentItemArgs,
 	MapImagesArgs,
 	CreateHtmlElementArgs,
-	CreateContextMenuArgs,
 } from '../types/types';
 
 const fetchOriginalUrls = async (img: any) => {
