@@ -1,7 +1,13 @@
-interface MapTextsArgs {
-	images: Image[];
-}
+type DomElementAttribute = string;
 
+interface CreateHtmlElementArgs {
+	el: DomElementAttribute;
+	elClassName?: DomElementAttribute;
+	elId?: DomElementAttribute;
+	elTextContent?: DomElementAttribute;
+	elLoading?: DomElementAttribute;
+	elSrc?: DomElementAttribute;
+}
 interface MapImagesArgs {
 	images: Image[];
 	container: HTMLElement;
@@ -56,7 +62,8 @@ interface DownloadCsvArgs {
 
 export type {
 	Image,
-	MapTextsArgs,
+	DomELementTypes,
+	CreateHtmlElementArgs,
 	MapImagesArgs,
 	ContextMenuItemArgs,
 	DeleteItemFromDomArgs,

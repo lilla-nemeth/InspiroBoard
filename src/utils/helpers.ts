@@ -8,7 +8,7 @@ import type {
 	EditItemInArrayArgs,
 	FindCurrentItemArgs,
 	MapImagesArgs,
-	MapTextsArgs,
+	CreateHtmlElementArgs,
 } from '../types/types';
 
 const fetchOriginalUrls = async (img: any) => {
@@ -22,8 +22,21 @@ const fetchOriginalUrls = async (img: any) => {
 	}
 };
 
-const mapTexts = (args: MapTextsArgs) => {
-	const { images } = args;
+const createHtmlElement = (args: CreateHtmlElementArgs) => {
+	const { el, elClassName, elId, elTextContent, elLoading, elSrc } = args;
+
+	const element = document.createElement(el) as HTMLElement;
+
+	// Optional attributes:
+	Object.assign(element, {
+		className: elClassName || undefined,
+		id: elId || undefined,
+		textContent: elTextContent || undefined,
+		loading: elLoading || undefined,
+		src: elSrc || undefined,
+	});
+
+	return element;
 };
 
 const mapImages = async (args: MapImagesArgs) => {
@@ -32,31 +45,21 @@ const mapImages = async (args: MapImagesArgs) => {
 	await Promise.all(images.map(fetchOriginalUrls));
 
 	const imgs = images.map((img) => {
-		const imgWrapper = document.createElement('div');
-		imgWrapper.className = 'image-wrapper';
-		imgWrapper.id = `image-text-${img.id}`;
+		const imgWrapper = createHtmlElement({ el: 'div', elClassName: 'image-wrapper', elId: `image-text-${img.id}` });
 		imgWrapper.setAttribute('data-id', img.id.toString());
 
-		const imgElement = document.createElement('img');
-		imgElement.className = 'image';
-		imgElement.loading = 'lazy';
-		imgElement.src = img.url;
-
-		const imgTextContainer = document.createElement('div');
-		imgTextContainer.className = 'image-text-container';
-
-		const imgText = document.createElement('p');
-		imgText.className = 'image-text';
-		imgText.textContent = img.text;
+		const imgElement = createHtmlElement({ el: 'img', elClassName: 'image', elLoading: 'lazy', elSrc: img.url });
+		const imgTextContainer = createHtmlElement({ el: 'div', elClassName: 'image-text-container' });
+		const imgText = createHtmlElement({ el: 'p', elClassName: 'image-text', elTextContent: img.text });
 
 		imgWrapper.appendChild(imgElement);
 		imgWrapper.appendChild(imgTextContainer);
 		imgTextContainer.appendChild(imgText);
+
 		return imgWrapper;
 	});
 
-	const imgsContainer = document.createElement('div');
-	imgsContainer.className = 'image-container';
+	const imgsContainer = createHtmlElement({ el: 'div', elClassName: 'image-container' });
 
 	imgs.forEach((img) => {
 		imgsContainer.appendChild(img);
@@ -68,11 +71,7 @@ const mapImages = async (args: MapImagesArgs) => {
 const createContextMenuItem = (args: ContextMenuItemArgs) => {
 	const { contextList, text, styleId, styleClass } = args;
 
-	const contextDelete = document.createElement('li');
-
-	contextDelete.className = styleClass;
-	contextDelete.id = styleId;
-	contextDelete.textContent = text;
+	const contextDelete = createHtmlElement({ el: 'li', elClassName: styleClass, elId: styleId, elTextContent: text });
 
 	contextList.appendChild(contextDelete);
 };
@@ -124,33 +123,35 @@ const editItemInDom = (args: EditItemInDomArgs) => {
 			const text = imageText.textContent;
 
 			// Creating Input
-			const input = document.createElement('input');
-			input.type = 'text';
-			input.value = text as string;
-			input.className = 'image-input';
+			const textarea = document.createElement('textarea');
+			textarea.rows = 4;
+			// textarea.cols = 50;
+			textarea.maxLength = 85;
+			textarea.className = 'image-textarea';
+			textarea.value = text as string;
 
-			imageText.innerHTML = input.value;
-			imageTextContainer.appendChild(input);
+			imageText.innerHTML = textarea.value;
+			imageTextContainer.appendChild(textarea);
 
-			input.focus();
-			input.select();
+			textarea.focus();
+			textarea.select();
 			imageText.style.display = 'none';
 
-			input.addEventListener('blur', (e) => {
-				const newText = input.value.trim();
+			textarea.addEventListener('blur', (e) => {
+				const newText = textarea.value.trim();
 
 				if (newText) {
 					imageText.textContent = newText;
 				}
 
-				input.remove();
+				textarea.remove();
 				imageText.style.display = 'block';
 				resolve(newText);
 			});
 
-			input.addEventListener('keypress', (e) => {
+			textarea.addEventListener('keypress', (e) => {
 				if (e.key === 'Enter') {
-					input.blur();
+					textarea.blur();
 				}
 			});
 		}

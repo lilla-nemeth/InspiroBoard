@@ -216,10 +216,10 @@ body {
 
 .image-text {
 	text-align: left;
-	word-break: break-all;
+	word-break: break-word;
 }
 
-.image-input {
+.image-textarea {
 	z-index: 100;
 	padding: 0.5rem;
 	width: 100%;
