@@ -42,12 +42,16 @@ const mapImages = async (args: MapImagesArgs) => {
 		imgElement.loading = 'lazy';
 		imgElement.src = img.url;
 
-		const imgText = document.createElement('div');
+		const imgTextContainer = document.createElement('div');
+		imgTextContainer.className = 'image-text-container';
+
+		const imgText = document.createElement('p');
 		imgText.className = 'image-text';
 		imgText.textContent = img.text;
 
 		imgWrapper.appendChild(imgElement);
-		imgWrapper.appendChild(imgText);
+		imgWrapper.appendChild(imgTextContainer);
+		imgTextContainer.appendChild(imgText);
 		return imgWrapper;
 	});
 
@@ -115,34 +119,44 @@ const editItemInDom = (args: EditItemInDomArgs) => {
 		const parentWrapper = eventTarget.closest('.image-wrapper') as HTMLElement | null;
 
 		if (parentWrapper) {
+			const imageTextContainer = parentWrapper.querySelector('.image-text-container') as HTMLElement;
 			const imageText = parentWrapper.querySelector('.image-text') as HTMLElement;
+			const text = imageText.textContent;
 
-			let text = imageText.textContent;
-
+			// Creating Input
 			const input = document.createElement('input');
 			input.type = 'text';
-			input.value = text || '';
+			input.value = text as string;
 			input.className = 'image-input';
 
-			imageText.textContent = '';
-			imageText.appendChild(input);
+			imageText.style.display = 'none';
+			imageText.innerHTML = input.value;
+			imageTextContainer.appendChild(input);
 
 			input.focus();
 			input.select();
 
-			input.addEventListener('keypress', (e: KeyboardEvent) => {
-				if (e.key === 'Enter') {
-					input.blur();
+			input.addEventListener('blur', (e) => {
+				const newText = input.value.trim();
+
+				if (newText) {
+					imageText.textContent = newText;
+				}
+
+				input.remove();
+				resolve(newText);
+			});
+
+			input.addEventListener('change', (e) => {
+				if (e.target !== imageText) {
+					imageText.style.display = 'block';
 				}
 			});
 
-			input.addEventListener('blur', () => {
-				const newText = input.value.trim();
-
-				if (text !== newText) {
-					imageText.textContent = newText;
+			input.addEventListener('keypress', (e) => {
+				if (e.key === 'Enter') {
+					input.blur();
 				}
-				resolve(newText);
 			});
 		}
 	});
