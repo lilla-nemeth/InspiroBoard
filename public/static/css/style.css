@@ -129,9 +129,30 @@ table {
 	border-spacing: 0;
 }
 /* CSS Reset ends */
+
+@font-face {
+	font-family: 'Playwrite-Regular';
+	src: url('/public/fonts/Playwrite-Regular.woff2') format('woff2'), url('/public/fonts/Playwrite-Regular.woff') format('woff'),
+		url('/public/fonts/Playwrite-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Roboto-Regular';
+	src: url('/public/fonts/Roboto-Regular.woff2') format('woff2'), url('/public/fonts/Roboto-Regular.woff') format('woff'),
+		url('/public/fonts/Roboto-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
 html,
 body {
+	font-family: Roboto-Regular, sans-serif;
 	height: 100%;
+	line-height: 1.25rem;
 }
 
 .main-container {
@@ -152,6 +173,8 @@ body {
 }
 
 .title {
+	font-family: Playwrite-Regular, sans-serif;
+	font-weight: 600;
 	font-size: 3rem;
 }
 
@@ -190,8 +213,13 @@ body {
 }
 
 .image-input {
-	padding: 0.25rem;
+	padding: 0.5rem;
+	border-radius: 0.5rem;
 	width: 100%;
+}
+
+.image-input:focus {
+	border: unset;
 }
 
 /* Context Menu */

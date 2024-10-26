@@ -91,7 +91,6 @@ document.addEventListener('click', (e: MouseEvent) => {
 				editItemInDom({ eventTarget: currentTarget });
 				editItemInArray({ eventTarget: currentTarget, arr: images });
 				currentTarget = null;
-
 				break;
 			case 'context-menu-delete':
 				deleteItemFromArray({ eventTarget: currentTarget, arr: images });
