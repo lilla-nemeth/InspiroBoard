@@ -8,6 +8,9 @@ interface CreateHtmlElementArgs {
 	elLoading?: DomElementAttribute;
 	elSrc?: DomElementAttribute;
 }
+
+interface CreateContextMenuArgs {}
+
 interface MapImagesArgs {
 	images: Image[];
 	container: HTMLElement;
@@ -17,14 +20,6 @@ interface Image {
 	id: number;
 	url: string;
 	text: string;
-}
-
-interface ContextMenuItemArgs {
-	document: Document;
-	contextList: HTMLUListElement;
-	text: string;
-	styleId: string;
-	styleClass: string;
 }
 
 interface FindCurrentItemArgs {
@@ -62,10 +57,9 @@ interface DownloadCsvArgs {
 
 export type {
 	Image,
-	DomELementTypes,
+	CreateContextMenuArgs,
 	CreateHtmlElementArgs,
 	MapImagesArgs,
-	ContextMenuItemArgs,
 	DeleteItemFromDomArgs,
 	DeleteItemFromArrayArgs,
 	EditItemInDomArgs,

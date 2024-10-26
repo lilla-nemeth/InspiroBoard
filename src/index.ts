@@ -1,13 +1,15 @@
 'use strict';
 
 import {
-	createContextMenuItem,
 	deleteItemFromDom,
 	deleteItemFromArray,
 	downloadCsv,
 	editItemInDom,
 	editItemInArray,
 	mapImages,
+	createContextMenu,
+	showContextMenu,
+	hideContextMenu,
 } from './utils/helpers';
 
 import { fetchImages } from './services/fetchImages';
@@ -26,59 +28,17 @@ let images: Image[] = [];
 	}
 })();
 
-const contextMenu = document.createElement('div');
-contextMenu.className = 'context-menu-wrapper';
+const contextMenu = createContextMenu();
 
-const contextList = document.createElement('ul');
-contextList.className = 'context-menu';
-
-createContextMenuItem({
-	document: document,
-	contextList: contextList,
-	text: 'Delete',
-	styleId: 'context-menu-delete',
-	styleClass: 'context-menu-actions',
-});
-
-createContextMenuItem({
-	document: document,
-	contextList: contextList,
-	text: 'Edit Text',
-	styleId: 'context-menu-edit',
-	styleClass: 'context-menu-actions',
-});
-
-createContextMenuItem({
-	document: document,
-	contextList: contextList,
-	text: 'Export List to CSV',
-	styleId: 'context-menu-csv',
-	styleClass: 'context-menu-actions',
-});
-
-contextMenu.appendChild(contextList);
 document.body.appendChild(contextMenu);
-
-const addContextMenu = (e: MouseEvent) => {
-	e.preventDefault();
-
-	contextMenu.classList.add('visible');
-	contextMenu.style.left = `${e.pageX}px`;
-	contextMenu.style.top = `${e.pageY}px`;
-};
-
-const hideContextMenu = () => {
-	contextMenu.classList.remove('visible');
-};
 
 let currentTarget: HTMLElement | null = null;
 
 contentContainer.addEventListener('contextmenu', (e: MouseEvent) => {
 	currentTarget = e.target as HTMLElement;
 
-	if (currentTarget?.closest('.image-wrapper')) {
-		e.preventDefault();
-		addContextMenu(e);
+	if (currentTarget.closest('.image-wrapper')) {
+		showContextMenu(contextMenu, e);
 	}
 });
 
@@ -105,5 +65,5 @@ document.addEventListener('click', (e: MouseEvent) => {
 		}
 	}
 
-	hideContextMenu();
+	hideContextMenu(contextMenu);
 });

@@ -1,5 +1,4 @@
 import type {
-	ContextMenuItemArgs,
 	ConvertToCsvArgs,
 	DeleteItemFromDomArgs,
 	DeleteItemFromArrayArgs,
@@ -9,6 +8,7 @@ import type {
 	FindCurrentItemArgs,
 	MapImagesArgs,
 	CreateHtmlElementArgs,
+	CreateContextMenuArgs,
 } from '../types/types';
 
 const fetchOriginalUrls = async (img: any) => {
@@ -29,14 +29,56 @@ const createHtmlElement = (args: CreateHtmlElementArgs) => {
 
 	// Optional attributes:
 	Object.assign(element, {
-		className: elClassName || undefined,
-		id: elId || undefined,
-		textContent: elTextContent || undefined,
-		loading: elLoading || undefined,
-		src: elSrc || undefined,
+		className: elClassName || '',
+		id: elId || '',
+		textContent: elTextContent || '',
+		loading: elLoading || '',
+		src: elSrc || '',
 	});
 
 	return element;
+};
+
+const createContextMenu = () => {
+	const contextMenu = createHtmlElement({ el: 'div', elClassName: 'context-menu-wrapper', elId: 'context-menu-wrapper' });
+	const list = createHtmlElement({ el: 'ul', elClassName: 'context-menu', elId: 'context-menu' });
+	const deleteElement = createHtmlElement({
+		el: 'li',
+		elTextContent: 'Delete',
+		elId: 'context-menu-delete',
+		elClassName: 'context-menu-actions',
+	});
+	const editElement = createHtmlElement({
+		el: 'li',
+		elTextContent: 'Edit Text',
+		elId: 'context-menu-edit',
+		elClassName: 'context-menu-actions',
+	});
+	const exportElement = createHtmlElement({
+		el: 'li',
+		elTextContent: 'Export List to CSV',
+		elId: 'context-menu-csv',
+		elClassName: 'context-menu-actions',
+	});
+
+	list.appendChild(deleteElement);
+	list.appendChild(editElement);
+	list.appendChild(exportElement);
+
+	contextMenu.appendChild(list);
+
+	return contextMenu;
+};
+
+const hideContextMenu = (contextMenu: HTMLElement) => {
+	contextMenu.classList.remove('visible');
+};
+
+const showContextMenu = (contextMenu: HTMLElement, e: MouseEvent) => {
+	e.preventDefault();
+	contextMenu.classList.add('visible');
+	contextMenu.style.left = `${e.pageX}px`;
+	contextMenu.style.top = `${e.pageY}px`;
 };
 
 const mapImages = async (args: MapImagesArgs) => {
@@ -66,14 +108,6 @@ const mapImages = async (args: MapImagesArgs) => {
 	});
 
 	container.appendChild(imgsContainer);
-};
-
-const createContextMenuItem = (args: ContextMenuItemArgs) => {
-	const { contextList, text, styleId, styleClass } = args;
-
-	const contextDelete = createHtmlElement({ el: 'li', elClassName: styleClass, elId: styleId, elTextContent: text });
-
-	contextList.appendChild(contextDelete);
 };
 
 const findCurrentItem = (args: FindCurrentItemArgs) => {
@@ -198,4 +232,15 @@ const downloadCsv = (args: DownloadCsvArgs) => {
 	URL.revokeObjectURL(url);
 };
 
-export { mapImages, createContextMenuItem, deleteItemFromDom, deleteItemFromArray, editItemInDom, editItemInArray, downloadCsv };
+export {
+	createContextMenu,
+	hideContextMenu,
+	showContextMenu,
+	createHtmlElement,
+	mapImages,
+	deleteItemFromDom,
+	deleteItemFromArray,
+	editItemInDom,
+	editItemInArray,
+	downloadCsv,
+};
