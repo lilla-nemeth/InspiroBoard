@@ -66,7 +66,7 @@ const editItemInDom = (args: EditItemInDomArgs) => {
 			const imageTextContainer = parentWrapper.querySelector('.image-text-container') as HTMLElement;
 			const imageText = parentWrapper.querySelector('.image-text') as HTMLElement;
 			const text = imageText.textContent;
-			const textarea = createTextarea({ rowNumber: 4, lengthNumber: 85, className: 'image-textarea', text: text });
+			const textarea = createTextarea({ rowNumber: 4, lengthNumber: 88, className: 'image-textarea', text: text });
 
 			imageText.innerHTML = textarea.value;
 			imageTextContainer.appendChild(textarea);
