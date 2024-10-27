@@ -1,18 +1,17 @@
 'use strict';
 
+import { fetchImages } from './services/fetchImages';
+import type { Image } from './types/types';
+import { mapImages } from './utils/images';
+import { createContextMenu, showContextMenu } from './utils/contextMenu';
 import {
 	deleteItemFromDom,
 	deleteItemFromArray,
-	downloadCsv,
 	editItemInDom,
 	editItemInArray,
-	mapImages,
-	createContextMenu,
-	showContextMenu,
-} from './utils/helpers';
-
-import { fetchImages } from './services/fetchImages';
-import type { Image } from './types/types';
+	convertToCsv,
+	downloadCsv,
+} from './utils/contextMenuActions';
 
 const contentContainer = document.getElementById('content-container') as HTMLElement;
 let images: Image[] = [];
@@ -73,7 +72,7 @@ document.addEventListener('click', (e: MouseEvent) => {
 				currentTarget = null;
 				break;
 			case 'context-menu-csv':
-				downloadCsv({ array: images, filename: 'list.csv' });
+				downloadCsv({ array: images, filename: 'list.csv', convertToCsv });
 				break;
 			default:
 				'';
