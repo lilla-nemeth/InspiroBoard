@@ -132,8 +132,8 @@ table {
 
 @font-face {
 	font-family: 'Playwrite-Regular';
-	src: url('/public/fonts/Playwrite-Regular.woff2') format('woff2'), url('/public/fonts/Playwrite-Regular.woff') format('woff'),
-		url('/public/fonts/Playwrite-Regular.ttf') format('truetype');
+	src: url('/fonts/Playwrite-Regular.woff2') format('woff2'), url('/fonts/Playwrite-Regular.woff') format('woff'),
+		url('/fonts/Playwrite-Regular.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
@@ -141,8 +141,8 @@ table {
 
 @font-face {
 	font-family: 'Roboto-Regular';
-	src: url('/public/fonts/Roboto-Regular.woff2') format('woff2'), url('/public/fonts/Roboto-Regular.woff') format('woff'),
-		url('/public/fonts/Roboto-Regular.ttf') format('truetype');
+	src: url('/fonts/Roboto-Regular.woff2') format('woff2'), url('/fonts/Roboto-Regular.woff') format('woff'),
+		url('/fonts/Roboto-Regular.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
