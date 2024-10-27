@@ -35,6 +35,13 @@ interface DeleteItemFromArrayArgs {
 	arr: Image[];
 }
 
+interface CreateTextareaArgs {
+	rowNumber: number;
+	lengthNumber: number;
+	className: string;
+	text: string | null;
+}
+
 interface EditItemInDomArgs {
 	eventTarget: HTMLElement;
 }
@@ -51,6 +58,7 @@ interface ConvertToCsvArgs {
 interface DownloadCsvArgs {
 	array: Image[];
 	filename: string;
+	convertToCsv: (args: ConvertToCsvArgs) => string;
 }
 
 export type {
@@ -59,6 +67,7 @@ export type {
 	MapImagesArgs,
 	DeleteItemFromDomArgs,
 	DeleteItemFromArrayArgs,
+	CreateTextareaArgs,
 	EditItemInDomArgs,
 	EditItemInArrayArgs,
 	ConvertToCsvArgs,
