@@ -32,44 +32,40 @@ document.body.appendChild(contextMenu);
 
 let currentTarget: HTMLElement | null = null;
 
-contentContainer.addEventListener('contextmenu', (e: MouseEvent) => {
+const handleContextMenu = (e: MouseEvent) => {
 	currentTarget = e.target as HTMLElement;
 
 	if (currentTarget.closest('.image-wrapper')) {
 		e.preventDefault();
 		showContextMenu(contextMenu, e);
 	}
-});
+};
 
-// Event listener for touch event
-contentContainer.addEventListener('touchstart', (e: TouchEvent) => {
+const handleTouch = (e: TouchEvent) => {
 	currentTarget = e.target as HTMLElement;
 
 	if (currentTarget.closest('.image-wrapper')) {
 		e.preventDefault();
-
 		const longPressTimer = setTimeout(() => {
 			showContextMenu(contextMenu, e);
 		}, 200);
 
 		currentTarget.addEventListener('touchend', () => clearTimeout(longPressTimer), { once: true });
 	}
-});
+};
 
-document.addEventListener('click', (e: MouseEvent) => {
-	let target = e.target as HTMLElement;
+const handleClick = (e: MouseEvent) => {
+	const target = e.target as HTMLElement;
 
 	if (currentTarget) {
 		switch (target.id) {
 			case 'context-menu-edit':
 				editItemInDom({ eventTarget: currentTarget });
 				editItemInArray({ eventTarget: currentTarget, arr: images });
-				currentTarget = null;
 				break;
 			case 'context-menu-delete':
 				deleteItemFromArray({ eventTarget: currentTarget, arr: images });
 				deleteItemFromDom({ eventTarget: currentTarget, styleClass: '.image-wrapper' });
-				currentTarget = null;
 				break;
 			case 'context-menu-csv':
 				downloadCsv({ array: images, filename: 'list.csv', convertToCsv });
@@ -77,13 +73,20 @@ document.addEventListener('click', (e: MouseEvent) => {
 			default:
 				'';
 		}
+		currentTarget = null;
 	}
 
 	contextMenu.style.display = 'none';
-});
+};
 
-document.addEventListener('keydown', (e: KeyboardEvent) => {
+const handleKeyDown = (e: KeyboardEvent) => {
 	if (e.key === 'Escape' && contextMenu) {
 		contextMenu.style.display = 'none';
 	}
-});
+};
+
+contentContainer.addEventListener('contextmenu', handleContextMenu);
+contentContainer.addEventListener('touchstart', handleTouch);
+
+document.addEventListener('click', handleClick);
+document.addEventListener('keydown', handleKeyDown);
