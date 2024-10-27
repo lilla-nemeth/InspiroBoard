@@ -1,5 +1,4 @@
 import type {
-	ContextMenuItemArgs,
 	ConvertToCsvArgs,
 	DeleteItemFromDomArgs,
 	DeleteItemFromArrayArgs,
@@ -8,57 +7,118 @@ import type {
 	EditItemInArrayArgs,
 	FindCurrentItemArgs,
 	MapImagesArgs,
-	MapTextsArgs,
+	CreateHtmlElementArgs,
 } from '../types/types';
 
-const mapTexts = (args: MapTextsArgs) => {
-	const { images } = args;
+const fetchOriginalUrls = async (img: any) => {
+	try {
+		const response = await fetch(img.url);
+		if (response.ok) {
+			img.url = response.url;
+		}
+	} catch (error) {
+		console.error('Failed to fetch original URLs', error);
+	}
 };
 
-const mapImages = (args: MapImagesArgs) => {
+const createHtmlElement = (args: CreateHtmlElementArgs) => {
+	const { el, elClassName, elId, elTextContent, elLoading, elSrc } = args;
+
+	const element = document.createElement(el) as HTMLElement;
+
+	// Optional attributes:
+	Object.assign(element, {
+		className: elClassName || '',
+		id: elId || '',
+		textContent: elTextContent || '',
+		loading: elLoading || '',
+		src: elSrc || '',
+	});
+
+	return element;
+};
+
+const createContextMenu = () => {
+	const contextMenu = createHtmlElement({ el: 'div', elClassName: 'context-menu-wrapper', elId: 'context-menu-wrapper' });
+	const list = createHtmlElement({ el: 'ul', elClassName: 'context-menu', elId: 'context-menu' });
+	const deleteElement = createHtmlElement({
+		el: 'li',
+		elTextContent: 'Delete',
+		elId: 'context-menu-delete',
+		elClassName: 'context-menu-actions',
+	});
+	const editElement = createHtmlElement({
+		el: 'li',
+		elTextContent: 'Edit Text',
+		elId: 'context-menu-edit',
+		elClassName: 'context-menu-actions',
+	});
+	const exportElement = createHtmlElement({
+		el: 'li',
+		elTextContent: 'Export List to CSV',
+		elId: 'context-menu-csv',
+		elClassName: 'context-menu-actions',
+	});
+
+	list.appendChild(deleteElement);
+	list.appendChild(editElement);
+	list.appendChild(exportElement);
+
+	contextMenu.appendChild(list);
+
+	return contextMenu;
+};
+
+const showContextMenu = (contextMenu: HTMLElement, e: MouseEvent | TouchEvent) => {
+	let mouseX = e instanceof MouseEvent ? e.pageX : (e as TouchEvent).touches[0].pageX;
+	let mouseY = e instanceof MouseEvent ? e.pageY : (e as TouchEvent).touches[0].pageY;
+
+	const menuWidth = contextMenu.offsetWidth;
+	const menuHeight = contextMenu.offsetHeight;
+
+	const viewportWidth = window.innerWidth;
+	const viewportHeight = window.innerHeight;
+
+	if (mouseX + menuWidth > viewportWidth) {
+		mouseX = viewportWidth - menuWidth;
+	}
+
+	if (mouseY + menuHeight > viewportHeight) {
+		mouseY = viewportHeight - menuHeight;
+	}
+
+	contextMenu.style.display = 'block';
+	contextMenu.style.left = `${mouseX}px`;
+	contextMenu.style.top = `${mouseY}px`;
+};
+
+const mapImages = async (args: MapImagesArgs) => {
 	const { images, container } = args;
 
+	await Promise.all(images.map(fetchOriginalUrls));
+
 	const imgs = images.map((img) => {
-		const imgWrapper = document.createElement('div');
-		imgWrapper.className = 'image-wrapper';
-		imgWrapper.id = `image-text-${img.id}`;
+		const imgWrapper = createHtmlElement({ el: 'div', elClassName: 'image-wrapper', elId: `image-text-${img.id}` });
 		imgWrapper.setAttribute('data-id', img.id.toString());
 
-		const imgElement = document.createElement('img');
-		imgElement.className = 'image';
-		imgElement.loading = 'lazy';
-		imgElement.src = img.url;
-
-		const imgText = document.createElement('div');
-		imgText.className = 'image-text';
-
-		imgText.textContent = img.text;
+		const imgElement = createHtmlElement({ el: 'img', elClassName: 'image', elLoading: 'lazy', elSrc: img.url });
+		const imgTextContainer = createHtmlElement({ el: 'div', elClassName: 'image-text-container' });
+		const imgText = createHtmlElement({ el: 'p', elClassName: 'image-text', elTextContent: img.text });
 
 		imgWrapper.appendChild(imgElement);
-		imgWrapper.appendChild(imgText);
+		imgWrapper.appendChild(imgTextContainer);
+		imgTextContainer.appendChild(imgText);
+
 		return imgWrapper;
 	});
 
-	const imgsContainer = document.createElement('div');
-	imgsContainer.className = 'image-container';
+	const imgsContainer = createHtmlElement({ el: 'div', elClassName: 'image-container' });
 
 	imgs.forEach((img) => {
 		imgsContainer.appendChild(img);
 	});
 
 	container.appendChild(imgsContainer);
-};
-
-const createContextMenuItem = (args: ContextMenuItemArgs) => {
-	const { contextList, text, styleId, styleClass } = args;
-
-	const contextDelete = document.createElement('li');
-
-	contextDelete.className = styleClass;
-	contextDelete.id = styleId;
-	contextDelete.textContent = text;
-
-	contextList.appendChild(contextDelete);
 };
 
 const findCurrentItem = (args: FindCurrentItemArgs) => {
@@ -103,34 +163,41 @@ const editItemInDom = (args: EditItemInDomArgs) => {
 		const parentWrapper = eventTarget.closest('.image-wrapper') as HTMLElement | null;
 
 		if (parentWrapper) {
+			const imageTextContainer = parentWrapper.querySelector('.image-text-container') as HTMLElement;
 			const imageText = parentWrapper.querySelector('.image-text') as HTMLElement;
+			const text = imageText.textContent;
 
-			let text = imageText.textContent;
+			// Creating Textarea
+			const textarea = document.createElement('textarea');
+			textarea.rows = 4;
+			// textarea.cols = 50;
+			textarea.maxLength = 85;
+			textarea.className = 'image-textarea';
+			textarea.value = text as string;
 
-			const input = document.createElement('input');
-			input.type = 'text';
-			input.value = text || '';
-			input.className = 'image-input'
+			imageText.innerHTML = textarea.value;
+			imageTextContainer.appendChild(textarea);
 
-			imageText.textContent = '';
-			imageText.appendChild(input);
+			textarea.focus();
+			textarea.select();
+			imageText.style.display = 'none';
 
-			input.focus();
-			input.select();
+			textarea.addEventListener('blur', () => {
+				const newText = textarea.value.trim();
 
-			input.addEventListener('keypress', (e: KeyboardEvent) => {
-				if (e.key === 'Enter') {
-					input.blur();
-				}
-			});
-
-			input.addEventListener('blur', () => {
-				const newText = input.value.trim();
-
-				if (text !== newText) {
+				if (newText) {
 					imageText.textContent = newText;
 				}
+
+				imageText.style.display = 'block';
+				textarea.remove();
 				resolve(newText);
+			});
+
+			textarea.addEventListener('keypress', (e) => {
+				if (e.key === 'Enter') {
+					textarea.blur();
+				}
 			});
 		}
 	});
@@ -176,4 +243,14 @@ const downloadCsv = (args: DownloadCsvArgs) => {
 	URL.revokeObjectURL(url);
 };
 
-export { mapImages, createContextMenuItem, deleteItemFromDom, deleteItemFromArray, editItemInDom, editItemInArray, downloadCsv };
+export {
+	createContextMenu,
+	showContextMenu,
+	createHtmlElement,
+	mapImages,
+	deleteItemFromDom,
+	deleteItemFromArray,
+	editItemInDom,
+	editItemInArray,
+	downloadCsv,
+};

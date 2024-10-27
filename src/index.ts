@@ -1,13 +1,14 @@
 'use strict';
 
 import {
-	createContextMenuItem,
 	deleteItemFromDom,
 	deleteItemFromArray,
 	downloadCsv,
 	editItemInDom,
 	editItemInArray,
 	mapImages,
+	createContextMenu,
+	showContextMenu,
 } from './utils/helpers';
 
 import { fetchImages } from './services/fetchImages';
@@ -26,58 +27,33 @@ let images: Image[] = [];
 	}
 })();
 
-const contextMenu = document.createElement('div');
-contextMenu.className = 'context-menu';
+const contextMenu = createContextMenu();
 
-const contextList = document.createElement('ul');
-
-createContextMenuItem({
-	document: document,
-	contextList: contextList,
-	text: 'Delete',
-	styleId: 'context-menu-delete',
-	styleClass: 'context-menu-actions',
-});
-
-createContextMenuItem({
-	document: document,
-	contextList: contextList,
-	text: 'Edit Text',
-	styleId: 'context-menu-edit',
-	styleClass: 'context-menu-actions',
-});
-
-createContextMenuItem({
-	document: document,
-	contextList: contextList,
-	text: 'Export List to CSV',
-	styleId: 'context-menu-csv',
-	styleClass: 'context-menu-actions',
-});
-
-contextMenu.appendChild(contextList);
 document.body.appendChild(contextMenu);
-
-const addContextMenu = (e: MouseEvent) => {
-	e.preventDefault();
-
-	contextMenu.classList.add('visible');
-	contextMenu.style.left = `${e.pageX}px`;
-	contextMenu.style.top = `${e.pageY}px`;
-};
-
-const hideContextMenu = () => {
-	contextMenu.classList.remove('visible');
-};
 
 let currentTarget: HTMLElement | null = null;
 
 contentContainer.addEventListener('contextmenu', (e: MouseEvent) => {
 	currentTarget = e.target as HTMLElement;
 
-	if (currentTarget?.closest('.image-wrapper')) {
+	if (currentTarget.closest('.image-wrapper')) {
 		e.preventDefault();
-		addContextMenu(e);
+		showContextMenu(contextMenu, e);
+	}
+});
+
+// Event listener for touch event
+contentContainer.addEventListener('touchstart', (e: TouchEvent) => {
+	currentTarget = e.target as HTMLElement;
+
+	if (currentTarget.closest('.image-wrapper')) {
+		e.preventDefault();
+
+		const longPressTimer = setTimeout(() => {
+			showContextMenu(contextMenu, e);
+		}, 200);
+
+		currentTarget.addEventListener('touchend', () => clearTimeout(longPressTimer), { once: true });
 	}
 });
 
@@ -90,7 +66,6 @@ document.addEventListener('click', (e: MouseEvent) => {
 				editItemInDom({ eventTarget: currentTarget });
 				editItemInArray({ eventTarget: currentTarget, arr: images });
 				currentTarget = null;
-
 				break;
 			case 'context-menu-delete':
 				deleteItemFromArray({ eventTarget: currentTarget, arr: images });
@@ -105,5 +80,5 @@ document.addEventListener('click', (e: MouseEvent) => {
 		}
 	}
 
-	hideContextMenu();
+	contextMenu.style.display = 'none';
 });
