@@ -155,7 +155,7 @@ const editItemInDom = (args: EditItemInDomArgs) => {
 			const imageText = parentWrapper.querySelector('.image-text') as HTMLElement;
 			const text = imageText.textContent;
 
-			// Creating Input
+			// Creating Textarea
 			const textarea = document.createElement('textarea');
 			textarea.rows = 4;
 			// textarea.cols = 50;
@@ -170,15 +170,15 @@ const editItemInDom = (args: EditItemInDomArgs) => {
 			textarea.select();
 			imageText.style.display = 'none';
 
-			textarea.addEventListener('blur', (e) => {
+			textarea.addEventListener('blur', () => {
 				const newText = textarea.value.trim();
 
 				if (newText) {
 					imageText.textContent = newText;
 				}
 
-				textarea.remove();
 				imageText.style.display = 'block';
+				textarea.remove();
 				resolve(newText);
 			});
 
