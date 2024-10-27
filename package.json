@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"main": "src/index.ts",
 	"scripts": {
-		"start": "webpack --watch",
+		"start": "webpack serve --open",
 		"build": "webpack"
 	},
 	"repository": {
@@ -11,14 +11,15 @@
 		"url": "git+ssh://git@github.com/lilla-nemeth/context-menu.git"
 	},
 	"author": "Lilla Németh",
-	"description": "Context Menu",
+	"description": "InspiroBoard - Context Menu",
 	"license": "MIT",
 	"devDependencies": {
 		"@eslint/js": "^9.13.0",
 		"eslint": "^9.13.0",
 		"globals": "^15.11.0",
 		"typescript": "^5.6.3",
-		"typescript-eslint": "^8.11.0"
+		"typescript-eslint": "^8.11.0",
+		"webpack-dev-server": "^5.1.0"
 	},
 	"dependencies": {
 		"ts-loader": "^9.5.1",

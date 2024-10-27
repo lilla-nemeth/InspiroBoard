@@ -12,6 +12,14 @@ module.exports = {
 			},
 		],
 	},
+	devServer: {
+		static: {
+			directory: path.join(__dirname, 'public'),
+		},
+		compress: true,
+		port: 3000,
+		open: true,
+	},
 	resolve: {
 		extensions: ['.ts', '.js'],
 	},
