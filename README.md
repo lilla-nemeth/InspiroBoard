@@ -15,3 +15,5 @@ yarn install
 ```bash
 yarn start
 ```
+
+port: 3000
