@@ -242,10 +242,6 @@ body {
 	border-radius: 1rem;
 }
 
-.context-menu-wrapper.visible {
-	display: block;
-}
-
 .context-menu {
 	padding: 0.5rem;
 }

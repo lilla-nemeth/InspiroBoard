@@ -69,15 +69,27 @@ const createContextMenu = () => {
 	return contextMenu;
 };
 
-const hideContextMenu = (contextMenu: HTMLElement) => {
-	contextMenu.classList.remove('visible');
-};
+const showContextMenu = (contextMenu: HTMLElement, e: MouseEvent | TouchEvent) => {
+	let mouseX = e instanceof MouseEvent ? e.pageX : (e as TouchEvent).touches[0].pageX;
+	let mouseY = e instanceof MouseEvent ? e.pageY : (e as TouchEvent).touches[0].pageY;
 
-const showContextMenu = (contextMenu: HTMLElement, e: MouseEvent) => {
-	e.preventDefault();
-	contextMenu.classList.add('visible');
-	contextMenu.style.left = `${e.pageX}px`;
-	contextMenu.style.top = `${e.pageY}px`;
+	const menuWidth = contextMenu.offsetWidth;
+	const menuHeight = contextMenu.offsetHeight;
+
+	const viewportWidth = window.innerWidth;
+	const viewportHeight = window.innerHeight;
+
+	if (mouseX + menuWidth > viewportWidth) {
+		mouseX = viewportWidth - menuWidth;
+	}
+
+	if (mouseY + menuHeight > viewportHeight) {
+		mouseY = viewportHeight - menuHeight;
+	}
+
+	contextMenu.style.display = 'block';
+	contextMenu.style.left = `${mouseX}px`;
+	contextMenu.style.top = `${mouseY}px`;
 };
 
 const mapImages = async (args: MapImagesArgs) => {
@@ -233,7 +245,6 @@ const downloadCsv = (args: DownloadCsvArgs) => {
 
 export {
 	createContextMenu,
-	hideContextMenu,
 	showContextMenu,
 	createHtmlElement,
 	mapImages,

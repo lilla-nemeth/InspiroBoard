@@ -9,7 +9,6 @@ import {
 	mapImages,
 	createContextMenu,
 	showContextMenu,
-	hideContextMenu,
 } from './utils/helpers';
 
 import { fetchImages } from './services/fetchImages';
@@ -38,7 +37,23 @@ contentContainer.addEventListener('contextmenu', (e: MouseEvent) => {
 	currentTarget = e.target as HTMLElement;
 
 	if (currentTarget.closest('.image-wrapper')) {
+		e.preventDefault();
 		showContextMenu(contextMenu, e);
+	}
+});
+
+// Event listener for touch event
+contentContainer.addEventListener('touchstart', (e: TouchEvent) => {
+	currentTarget = e.target as HTMLElement;
+
+	if (currentTarget.closest('.image-wrapper')) {
+		e.preventDefault();
+
+		const longPressTimer = setTimeout(() => {
+			showContextMenu(contextMenu, e);
+		}, 200);
+
+		currentTarget.addEventListener('touchend', () => clearTimeout(longPressTimer), { once: true });
 	}
 });
 
@@ -65,5 +80,5 @@ document.addEventListener('click', (e: MouseEvent) => {
 		}
 	}
 
-	hideContextMenu(contextMenu);
+	contextMenu.style.display = 'none';
 });
