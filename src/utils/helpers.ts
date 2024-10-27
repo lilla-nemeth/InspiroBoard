@@ -13,18 +13,19 @@ import type {
 const fetchOriginalUrls = async (img: any) => {
 	try {
 		const response = await fetch(img.url);
+
 		if (response.ok) {
 			img.url = response.url;
 		}
 	} catch (error) {
-		console.error('Failed to fetch original URLs', error);
+		console.error('Failed to fetch original image URLs', error);
 	}
 };
 
 const createHtmlElement = (args: CreateHtmlElementArgs) => {
 	const { el, elClassName, elId, elTextContent, elLoading, elSrc } = args;
 
-	const element = document.createElement(el) as HTMLElement;
+	const element = document.createElement(el);
 
 	// Optional attributes:
 	Object.assign(element, {
@@ -41,28 +42,22 @@ const createHtmlElement = (args: CreateHtmlElementArgs) => {
 const createContextMenu = () => {
 	const contextMenu = createHtmlElement({ el: 'div', elClassName: 'context-menu-wrapper', elId: 'context-menu-wrapper' });
 	const list = createHtmlElement({ el: 'ul', elClassName: 'context-menu', elId: 'context-menu' });
-	const deleteElement = createHtmlElement({
-		el: 'li',
-		elTextContent: 'Delete',
-		elId: 'context-menu-delete',
-		elClassName: 'context-menu-actions',
-	});
-	const editElement = createHtmlElement({
-		el: 'li',
-		elTextContent: 'Edit Text',
-		elId: 'context-menu-edit',
-		elClassName: 'context-menu-actions',
-	});
-	const exportElement = createHtmlElement({
-		el: 'li',
-		elTextContent: 'Export List to CSV',
-		elId: 'context-menu-csv',
-		elClassName: 'context-menu-actions',
-	});
+	const contextMenuItems = [
+		{ element: 'li', textContent: 'Delete', id: 'context-menu-delete', className: 'context-menu-actions' },
+		{ element: 'li', textContent: 'Edit Text', id: 'context-menu-edit', className: 'context-menu-actions' },
+		{ element: 'li', textContent: 'Export List to CSV', id: 'context-menu-csv', className: 'context-menu-actions' },
+	];
 
-	list.appendChild(deleteElement);
-	list.appendChild(editElement);
-	list.appendChild(exportElement);
+	contextMenuItems.forEach((item) => {
+		const contextMenuItem = createHtmlElement({
+			el: item.element,
+			elTextContent: item.textContent,
+			elId: item.id,
+			elClassName: item.className,
+		});
+
+		list.appendChild(contextMenuItem);
+	});
 
 	contextMenu.appendChild(list);
 
