@@ -88,7 +88,7 @@ const editItemInDom = (args: EditItemInDomArgs) => {
 				resolve(newText);
 			});
 
-			textarea.addEventListener('keypress', (e) => {
+			textarea.addEventListener('keypress', (e: KeyboardEvent) => {
 				if (e.key === 'Enter') {
 					textarea.blur();
 				}

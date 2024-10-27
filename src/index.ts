@@ -81,3 +81,9 @@ document.addEventListener('click', (e: MouseEvent) => {
 
 	contextMenu.style.display = 'none';
 });
+
+document.addEventListener('keydown', (e: KeyboardEvent) => {
+	if (e.key === 'Escape' && contextMenu) {
+		contextMenu.style.display = 'none';
+	}
+});
