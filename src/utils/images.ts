@@ -1,7 +1,7 @@
 import type { MapImagesArgs, Image } from '../types/types';
 import { createHtmlElement } from './helpers';
 
-const fetchOriginalUrls = async (img: any) => {
+const fetchOriginalUrls = async (img: Image) => {
 	try {
 		const response = await fetch(img.url);
 
