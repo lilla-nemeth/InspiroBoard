@@ -26,8 +26,8 @@ const createContextMenu = () => {
 };
 
 const showContextMenu = (contextMenu: HTMLElement, e: MouseEvent | TouchEvent) => {
-	let mouseX = e instanceof MouseEvent ? e.pageX : (e as TouchEvent).touches[0].pageX;
-	let mouseY = e instanceof MouseEvent ? e.pageY : (e as TouchEvent).touches[0].pageY;
+	let mouseX = e instanceof MouseEvent ? e.clientX : (e as TouchEvent).touches[0].clientX;
+	let mouseY = e instanceof MouseEvent ? e.clientY : (e as TouchEvent).touches[0].clientY;
 
 	const menuWidth = contextMenu.offsetWidth;
 	const menuHeight = contextMenu.offsetHeight;
@@ -39,11 +39,12 @@ const showContextMenu = (contextMenu: HTMLElement, e: MouseEvent | TouchEvent) =
 		mouseX = viewportWidth - menuWidth;
 	}
 
-	if (mouseY + menuHeight > viewportHeight) {
-		mouseY = viewportHeight - menuHeight;
+	if (mouseY + menuHeight > viewportHeight + window.scrollY) {
+		mouseY = viewportHeight + window.scrollY - menuHeight;
 	}
 
 	contextMenu.style.display = 'block';
+	contextMenu.style.position = 'fixed';
 	contextMenu.style.left = `${mouseX}px`;
 	contextMenu.style.top = `${mouseY}px`;
 };
