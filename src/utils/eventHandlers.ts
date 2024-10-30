@@ -4,6 +4,10 @@ import type { Image } from '../types/types';
 
 let currentTarget: HTMLElement | null = null;
 
+const hideContextMenu = (contextMenu: HTMLElement) => {
+	contextMenu.style.display = 'none';
+};
+
 const handleContextMenu = (e: MouseEvent, contextMenu: HTMLElement) => {
 	currentTarget = e.target as HTMLElement;
 
@@ -48,13 +52,17 @@ const handleClick = (e: MouseEvent, contextMenu: HTMLElement, images: Image[]) =
 		currentTarget = null;
 	}
 
-	contextMenu.style.display = 'none';
+	hideContextMenu(contextMenu);
 };
 
 const handleKeyDown = (e: KeyboardEvent, contextMenu: HTMLElement) => {
 	if (e.key === 'Escape' && contextMenu) {
-		contextMenu.style.display = 'none';
+		hideContextMenu(contextMenu);
 	}
 };
 
-export { handleContextMenu, handleTouch, handleClick, handleKeyDown };
+const handleScroll = (e: Event, contextMenu: HTMLElement) => {
+	e && hideContextMenu(contextMenu);
+};
+
+export { handleContextMenu, handleTouch, handleClick, handleKeyDown, handleScroll };

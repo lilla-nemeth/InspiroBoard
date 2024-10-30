@@ -4,7 +4,7 @@ import { fetchImages } from './services/fetchImages';
 import type { Image } from './types/types';
 import { mapImages } from './utils/images';
 import { createContextMenu } from './utils/contextMenu';
-import { handleClick, handleTouch, handleContextMenu, handleKeyDown } from './utils/eventHandlers';
+import { handleClick, handleTouch, handleContextMenu, handleKeyDown, handleScroll } from './utils/eventHandlers';
 
 const contentContainer = document.getElementById('content-container') as HTMLElement;
 let images: Image[] = [];
@@ -28,3 +28,4 @@ contentContainer.addEventListener('touchstart', (e: TouchEvent) => handleTouch(e
 
 document.addEventListener('click', (e: MouseEvent) => handleClick(e, contextMenu, images));
 document.addEventListener('keydown', (e: KeyboardEvent) => handleKeyDown(e, contextMenu));
+window.addEventListener('scroll', (e: Event) => handleScroll(e, contextMenu));
