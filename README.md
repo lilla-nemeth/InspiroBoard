@@ -10,6 +10,12 @@ The app fetches random pictures with text. The user can edit the text pictures, 
 yarn install
 ```
 
+## Build
+
+```bash
+yarn build
+```
+
 ## Running the App
 
 ```bash
