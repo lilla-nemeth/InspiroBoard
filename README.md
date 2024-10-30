@@ -1,4 +1,4 @@
-# InspiroBoard - Context Menu
+# InspiroBoard
 
 Built with vanilla TypeScript, CSS.
 
